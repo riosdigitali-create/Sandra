@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario — Brenda</title>
+<style>
+  :root{
+    --bg:#f6f4ef;
+    --card:#ffffff;
+    --ink:#1f2430;
+    --muted:#5b6473;
+    --accent:#3a5a78;
+    --accent-soft:#e8f0f7;
+    --warn:#9a4a2a;
+    --warn-soft:#fdecde;
+    --border:#e3ddce;
+    --shadow:0 2px 12px rgba(0,0,0,.05);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.55;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:32px 20px 120px}
+  header.top{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:28px;
+    box-shadow:var(--shadow);
+    margin-bottom:24px;
+  }
+  header.top h1{margin:0 0 8px;font-size:28px;letter-spacing:-.02em}
+  header.top p{margin:6px 0;color:var(--muted)}
+  .meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+  .meta input{
+    flex:1;min-width:220px;
+    padding:10px 12px;border:1px solid var(--border);border-radius:8px;
+    font-size:14px;background:#fafafa;
+  }
+  .saved-pill{
+    display:inline-block;background:var(--accent-soft);color:var(--accent);
+    padding:4px 10px;border-radius:999px;font-size:12px;margin-top:10px;
+    font-weight:500;
+  }
+  section.block{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:24px;
+    margin-bottom:18px;
+    box-shadow:var(--shadow);
+  }
+  section.block h2{
+    margin:0 0 6px;font-size:20px;letter-spacing:-.01em;
+    display:flex;align-items:center;gap:10px;
+  }
+  section.block .lead{margin:0 0 14px;color:var(--muted);font-size:14px}
+  .tip{
+    background:var(--accent-soft);
+    border-left:3px solid var(--accent);
+    padding:10px 14px;border-radius:6px;
+    color:#244;font-size:13px;margin-bottom:18px;
+  }
+  .tip.warn{
+    background:var(--warn-soft);
+    border-left-color:var(--warn);
+    color:#5b3018;
+  }
+  .q{margin:18px 0}
+  .q label{
+    display:block;font-weight:600;margin-bottom:6px;font-size:15px;
+  }
+  .q .hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+  textarea{
+    width:100%;
+    min-height:90px;
+    padding:12px 14px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    font-family:inherit;
+    font-size:15px;
+    line-height:1.5;
+    resize:vertical;
+    background:#fcfaf5;
+    transition:border-color .15s,background .15s;
+  }
+  textarea:focus{outline:none;border-color:var(--accent);background:#fff}
+  .footer-actions{
+    position:fixed;bottom:0;left:0;right:0;
+    background:rgba(255,255,255,.96);
+    border-top:1px solid var(--border);
+    padding:12px 16px;
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+    backdrop-filter:blur(8px);
+    z-index:50;
+  }
+  .footer-actions button{
+    padding:10px 16px;
+    border:1px solid var(--border);
+    background:#fff;
+    border-radius:10px;
+    font-size:14px;font-weight:600;
+    cursor:pointer;
+    color:var(--ink);
+    transition:all .15s;
+  }
+  .footer-actions button:hover{background:#f0ece1}
+  .footer-actions button.primary{
+    background:var(--accent);color:#fff;border-color:var(--accent);
+  }
+  .footer-actions button.primary:hover{background:#2c4a64}
+  .footer-actions button.danger{color:var(--warn)}
+  .progress-bar{
+    height:4px;background:#e3ddce;border-radius:2px;overflow:hidden;margin-top:14px;
+  }
+  .progress-bar > div{
+    height:100%;background:var(--accent);width:0%;transition:width .3s;
+  }
+  .section-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:30px;height:30px;border-radius:50%;
+    background:var(--accent-soft);color:var(--accent);
+    font-size:13px;font-weight:700;
+  }
+  @media print{
+    .footer-actions{display:none}
+    body{background:#fff}
+    section.block,header.top{box-shadow:none;border-color:#ccc;page-break-inside:avoid}
+    textarea{border:none;background:#fff;min-height:auto}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Cuestionario para Brenda</h1>
+    <p>Hola Brenda. Este formulario tiene todas las preguntas que necesito que respondas con tranquilidad. Tómate el tiempo que requieras — <strong>tus respuestas se guardan automáticamente en este navegador</strong> mientras escribes, así que puedes cerrar la página y continuar después.</p>
+    <p style="margin-top:10px"><strong>Cuando termines</strong>, presiona <em>"Descargar como Word"</em> o <em>"Descargar PDF"</em> al final de la página y mándame el archivo.</p>
+    <div class="meta">
+      <input type="text" id="meta-nombre" placeholder="Tu nombre completo" data-key="meta_nombre">
+      <input type="date" id="meta-fecha" data-key="meta_fecha">
+    </div>
+    <div class="saved-pill" id="save-status">Listo</div>
+    <div class="progress-bar"><div id="progress"></div></div>
+  </header>
+
+  <!-- I -->
+  <section class="block">
+    <h2><span class="section-num">I</span> Relación y contexto</h2>
+    <p class="lead">Sobre cómo fue tu relación con el actor y los antecedentes.</p>
+    <div class="tip">
+      <strong>Sugerencia al redactar:</strong> sé específica con fechas, lugares y duración. Cuenta los hechos en orden cronológico. Evita adjetivos cargados ("monstruo", "horrible") — los hechos hablan más fuerte que las opiniones.
+    </div>
+
+    <div class="q">
+      <label>1. ¿Cómo fue realmente tu relación con el actor (duración, dinámica, cómo terminó)?</label>
+      <p class="hint">Incluye fechas aproximadas de inicio y fin, si vivieron juntos, y el motivo concreto del rompimiento.</p>
+      <textarea data-key="i_1"></textarea>
+    </div>
+
+    <div class="q">
+      <label>2. ¿Durante la relación existieron episodios de violencia física o psicológica?</label>
+      <p class="hint">Describe los hechos concretos (qué pasó, cuándo, dónde). Si hay reportes médicos, denuncias, fotos o testigos, menciónalos.</p>
+      <textarea data-key="i_2"></textarea>
+    </div>
+
+    <div class="q">
+      <label>3. ¿Puedes describir el evento que llevó a la denuncia de 2014?</label>
+      <p class="hint">Fecha exacta si la recuerdas, qué ocurrió, ante qué autoridad denunciaste y número de expediente si lo tienes.</p>
+      <textarea data-key="i_3"></textarea>
+    </div>
+
+    <div class="q">
+      <label>4. ¿Por qué decidiste terminar definitivamente la relación?</label>
+      <p class="hint">Enfócate en los hechos que te llevaron a la decisión, no en sentimientos generales.</p>
+      <textarea data-key="i_4"></textarea>
+    </div>
+  </section>
+
+  <!-- II -->
+  <section class="block">
+    <h2><span class="section-num">II</span> Embarazo</h2>
+    <p class="lead">Comportamiento del actor durante tu embarazo.</p>
+    <div class="tip">
+      <strong>Sugerencia al redactar:</strong> menciona si hay mensajes, audios o testigos que respalden lo que cuentas. Si recibiste apoyo económico, sé específica sobre montos y frecuencia (o la ausencia de ambos).
+    </div>
+
+    <div class="q">
+      <label>5. ¿Cómo fue el comportamiento del actor durante tu embarazo?</label>
+      <textarea data-key="ii_5"></textarea>
+    </div>
+
+    <div class="q">
+      <label>6. ¿El actor apoyó emocional o económicamente en ese periodo?</label>
+      <p class="hint">Si hubo apoyo, cuánto y con qué frecuencia. Si no hubo, dilo claramente.</p>
+      <textarea data-key="ii_6"></textarea>
+    </div>
+
+    <div class="q">
+      <label>7. ¿Hubo comentarios, presiones o actitudes negativas respecto al embarazo?</label>
+      <p class="hint">Cita ejemplos concretos si los recuerdas (frases textuales si es posible).</p>
+      <textarea data-key="ii_7"></textarea>
+    </div>
+  </section>
+
+  <!-- III -->
+  <section class="block">
+    <h2><span class="section-num">III</span> Nacimiento y vida de la menor</h2>
+    <p class="lead">Presencia y participación del actor desde el nacimiento.</p>
+    <div class="tip">
+      <strong>Sugerencia al redactar:</strong> cronología clara. ¿Cuándo nació? ¿Cuándo fue la última visita o contacto? Las fechas son clave aquí.
+    </div>
+
+    <div class="q">
+      <label>8. ¿El actor estuvo presente en el nacimiento de la menor?</label>
+      <textarea data-key="iii_8"></textarea>
+    </div>
+
+    <div class="q">
+      <label>9. Después del nacimiento, ¿el actor mantuvo contacto constante?</label>
+      <p class="hint">Describe la frecuencia y forma del contacto (presencial, llamadas, mensajes).</p>
+      <textarea data-key="iii_9"></textarea>
+    </div>
+
+    <div class="q">
+      <label>10. ¿Participó activamente en la crianza (visitas, cuidados, decisiones)?</label>
+      <p class="hint">Ejemplos concretos: ¿asistió a consultas médicas? ¿la cuidó alguna vez solo? ¿participó en decisiones escolares?</p>
+      <textarea data-key="iii_10"></textarea>
+    </div>
+
+    <div class="q">
+      <label>11. ¿Desde cuándo dejó de tener presencia en la vida de la menor?</label>
+      <p class="hint">Fecha aproximada y circunstancias. ¿Fue gradual o abrupto?</p>
+      <textarea data-key="iii_11"></textarea>
+    </div>
+  </section>
+
+  <!-- IV -->
+  <section class="block">
+    <h2><span class="section-num">IV</span> Manutención</h2>
+    <p class="lead">Apoyo económico para la menor.</p>
+    <div class="tip warn">
+      <strong>Importante:</strong> sé lo más específica posible con cifras, fechas y medios de pago (transferencias, efectivo). Si tienes recibos, capturas de transferencia o estados de cuenta, son tu mejor evidencia. No adornes ni minimices — los hechos exactos son lo que pesa.
+    </div>
+
+    <div class="q">
+      <label>12. ¿El actor ha contribuido económicamente de forma constante?</label>
+      <textarea data-key="iv_12"></textarea>
+    </div>
+
+    <div class="q">
+      <label>13. ¿Puedes describir si los apoyos han sido esporádicos o inexistentes?</label>
+      <p class="hint">Si han sido esporádicos: cuántas veces aproximadamente, qué montos, en qué fechas. Si han sido inexistentes desde tal fecha, dilo así.</p>
+      <textarea data-key="iv_13"></textarea>
+    </div>
+
+    <div class="q">
+      <label>14. ¿Quién ha cubierto los gastos principales de la menor?</label>
+      <p class="hint">Detalla rubros: escuela, salud, alimentación, ropa, actividades. ¿Quién paga qué?</p>
+      <textarea data-key="iv_14"></textarea>
+    </div>
+
+    <div class="q">
+      <label>15. ¿Sabes si los ingresos que declara el actor son reales o inconsistentes con su estilo de vida?</label>
+      <p class="hint">Si conoces datos concretos sobre su trabajo, propiedades, vehículos, viajes o gastos visibles, descríbelos. No especules — solo lo que sepas con certeza o de fuentes que puedas mencionar.</p>
+      <textarea data-key="iv_15"></textarea>
+    </div>
+  </section>
+
+  <!-- V -->
+  <section class="block">
+    <h2><span class="section-num">V</span> Conducta del actor</h2>
+    <p class="lead">Comportamiento que pueda ser relevante para la seguridad.</p>
+    <div class="tip warn">
+      <strong>Importante:</strong> describe conductas observables (qué hizo, dijo, cómo reaccionó), no etiquetas ("es un loco"). Indica fechas, lugares y testigos siempre que puedas.
+    </div>
+
+    <div class="q">
+      <label>16. ¿El actor ha mostrado conductas agresivas, inestables o preocupantes?</label>
+      <textarea data-key="v_16"></textarea>
+    </div>
+
+    <div class="q">
+      <label>17. ¿Has tenido miedo por tu seguridad o la de tu hija en algún momento?</label>
+      <p class="hint">Describe los hechos que te generaron ese miedo. Lo que importa es lo que él hizo, no solo lo que tú sentiste.</p>
+      <textarea data-key="v_17"></textarea>
+    </div>
+
+    <div class="q">
+      <label>18. ¿Existen testigos o evidencia de su comportamiento?</label>
+      <p class="hint">Nombres (si quieres compartirlos aquí), tipo de evidencia disponible (mensajes, audios, fotos, denuncias, reportes médicos).</p>
+      <textarea data-key="v_18"></textarea>
+    </div>
+  </section>
+
+  <!-- VI -->
+  <section class="block">
+    <h2><span class="section-num">VI</span> Relación actual con la menor</h2>
+    <p class="lead">Cómo está la menor frente a la figura del actor hoy.</p>
+    <div class="tip warn">
+      <strong>Sección clave — responde con cuidado:</strong> el juez prestará especial atención a la última pregunta. Sé honesta. Decir que "jamás influiste" si lo hiciste puede contradecirse con la pericial. Lo más fuerte es mostrar que has protegido a la menor sin manipularla, y que tus acciones se basan en hechos.
+    </div>
+
+    <div class="q">
+      <label>19. ¿La menor conoce al actor?</label>
+      <textarea data-key="vi_19"></textarea>
+    </div>
+
+    <div class="q">
+      <label>20. ¿Cómo reacciona la menor cuando se menciona o se propone convivir con él?</label>
+      <p class="hint">Describe conductas observables: llanto, silencio, preguntas, cambios de ánimo. Cita frases textuales si las recuerdas.</p>
+      <textarea data-key="vi_20"></textarea>
+    </div>
+
+    <div class="q">
+      <label>21. ¿Ha expresado rechazo? ¿Cómo lo manifiesta?</label>
+      <textarea data-key="vi_21"></textarea>
+    </div>
+
+    <div class="q">
+      <label>22. ¿Has influido de alguna manera en la percepción de la menor sobre el actor?</label>
+      <p class="hint"><strong>Responde con la verdad y con cuidado.</strong> Lo natural es que hayas tenido que explicarle algunas cosas según su edad. Describe cómo manejas el tema (qué le dices, qué le ocultas, cómo respondes a sus preguntas) sin pintar un cuadro irreal de neutralidad absoluta.</p>
+      <textarea data-key="vi_22"></textarea>
+    </div>
+  </section>
+
+  <!-- VII -->
+  <section class="block">
+    <h2><span class="section-num">VII</span> Bienestar de la menor</h2>
+    <p class="lead">El interés superior de la niña, en tus palabras.</p>
+    <div class="tip">
+      <strong>Sugerencia al redactar:</strong> centra todo en ella, no en el conflicto entre tú y el actor. El juez evalúa qué es mejor para la niña, no quién tiene la razón entre los adultos.
+    </div>
+
+    <div class="q">
+      <label>23. ¿Consideras que convivir con el actor actualmente afecta emocionalmente a la menor? ¿Por qué?</label>
+      <textarea data-key="vii_23"></textarea>
+    </div>
+
+    <div class="q">
+      <label>24. ¿Qué cambios has observado en la menor respecto a este tema?</label>
+      <p class="hint">Cambios en sueño, apetito, ánimo, conducta en la escuela, relaciones con otros niños o adultos.</p>
+      <textarea data-key="vii_24"></textarea>
+    </div>
+
+    <div class="q">
+      <label>25. ¿Qué crees que es lo mejor para su estabilidad en este momento?</label>
+      <textarea data-key="vii_25"></textarea>
+    </div>
+  </section>
+
+  <!-- VIII -->
+  <section class="block">
+    <h2><span class="section-num">VIII</span> Apellidos</h2>
+    <p class="lead">Sobre los apellidos actuales de la menor.</p>
+    <div class="tip">
+      <strong>Sugerencia al redactar:</strong> piensa en términos del impacto real para la niña, no en lo que tú prefieras. Documentos escolares, identificaciones, círculo social: todo cuenta.
+    </div>
+
+    <div class="q">
+      <label>26. ¿Qué apellidos tiene actualmente la menor?</label>
+      <textarea data-key="viii_26"></textarea>
+    </div>
+
+    <div class="q">
+      <label>27. ¿Desde cuándo los usa?</label>
+      <textarea data-key="viii_27"></textarea>
+    </div>
+
+    <div class="q">
+      <label>28. ¿Cómo impactaría cambiar sus apellidos en su entorno (escuela, emocionalmente, socialmente)?</label>
+      <textarea data-key="viii_28"></textarea>
+    </div>
+
+    <div class="q">
+      <label>29. ¿Existe algún beneficio real para la menor en hacer ese cambio?</label>
+      <textarea data-key="viii_29"></textarea>
+    </div>
+  </section>
+
+  <!-- IX -->
+  <section class="block">
+    <h2><span class="section-num">IX</span> Posición final</h2>
+    <p class="lead">Tu postura y lo que pides al juzgador.</p>
+    <div class="tip">
+      <strong>Sugerencia al redactar:</strong> la oposición total a las convivencias suele leerse como mala fe si no está bien sustentada. Lo más sólido es plantear bajo qué condiciones sí pueden ocurrir, demostrando que tu interés es la menor, no obstaculizar al actor.
+    </div>
+
+    <div class="q">
+      <label>30. ¿Te opones a las convivencias? ¿Por qué?</label>
+      <textarea data-key="ix_30"></textarea>
+    </div>
+
+    <div class="q">
+      <label>31. Si el juez las ordenara, ¿bajo qué condiciones considerarías que no se afecte a la menor?</label>
+      <p class="hint">Ejemplos: convivencias supervisadas, en lugar neutral, con un perito presente, con horarios específicos, con presencia de un familiar de confianza, etc.</p>
+      <textarea data-key="ix_31"></textarea>
+    </div>
+
+    <div class="q">
+      <label>32. ¿Qué solicitas al juez respecto al bienestar de tu hija?</label>
+      <textarea data-key="ix_32"></textarea>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Notas adicionales (opcional)</h2>
+    <p class="lead">Cualquier cosa que quieras agregar, contexto adicional, o información que sientas que falta.</p>
+    <div class="q">
+      <textarea data-key="extra" style="min-height:140px"></textarea>
+    </div>
+  </section>
+
+</div>
+
+<div class="footer-actions">
+  <button class="primary" onclick="downloadWord()">⬇ Descargar como Word</button>
+  <button onclick="window.print()">⬇ Descargar PDF (Imprimir)</button>
+  <button onclick="copyAll()">📋 Copiar todo</button>
+  <button class="danger" onclick="clearAll()">🗑 Borrar todo</button>
+</div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'cuestionario_brenda_v1';
+  const fields = document.querySelectorAll('[data-key]');
+  const status = document.getElementById('save-status');
+  const progress = document.getElementById('progress');
+
+  // Load
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e){}
+  fields.forEach(el=>{
+    const k = el.dataset.key;
+    if(saved[k]) el.value = saved[k];
+  });
+  if(!document.getElementById('meta-fecha').value){
+    document.getElementById('meta-fecha').value = new Date().toISOString().slice(0,10);
+  }
+
+  // Save (debounced)
+  let saveTimer;
+  function save(){
+    clearTimeout(saveTimer);
+    status.textContent = 'Guardando…';
+    saveTimer = setTimeout(()=>{
+      const data = {};
+      fields.forEach(el=>{ data[el.dataset.key] = el.value; });
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        const t = new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+        status.textContent = '✓ Guardado a las ' + t;
+      } catch(e){
+        status.textContent = '⚠ No se pudo guardar';
+      }
+      updateProgress();
+    }, 400);
+  }
+
+  function updateProgress(){
+    const total = document.querySelectorAll('textarea[data-key]').length;
+    const filled = Array.from(document.querySelectorAll('textarea[data-key]'))
+      .filter(t => t.value.trim().length >= 3).length;
+    progress.style.width = ((filled/total)*100).toFixed(1) + '%';
+  }
+
+  fields.forEach(el => el.addEventListener('input', save));
+  updateProgress();
+
+  // Build a nice document for download
+  function buildText(){
+    const nombre = document.getElementById('meta-nombre').value || '________________';
+    const fecha = document.getElementById('meta-fecha').value || '';
+    let out = `CUESTIONARIO\n`;
+    out += `Respondido por: ${nombre}\n`;
+    out += `Fecha: ${fecha}\n`;
+    out += '='.repeat(60) + '\n\n';
+
+    document.querySelectorAll('section.block').forEach(sec => {
+      const h = sec.querySelector('h2');
+      if(h){
+        out += '\n' + h.innerText.toUpperCase() + '\n';
+        out += '-'.repeat(60) + '\n';
+      }
+      sec.querySelectorAll('.q').forEach(q => {
+        const label = q.querySelector('label');
+        const ta = q.querySelector('textarea');
+        if(label) out += '\n' + label.innerText + '\n';
+        if(ta) out += (ta.value.trim() || '[sin respuesta]') + '\n';
+      });
+    });
+    return out;
+  }
+
+  function buildHtmlForWord(){
+    const nombre = document.getElementById('meta-nombre').value || '________________';
+    const fecha = document.getElementById('meta-fecha').value || '';
+    let html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset='utf-8'><title>Cuestionario</title>
+<style>
+  body{font-family:Calibri,sans-serif;font-size:11pt;color:#000;line-height:1.4}
+  h1{font-size:18pt;margin-bottom:4pt}
+  h2{font-size:14pt;color:#1f3a5f;border-bottom:1px solid #999;padding-bottom:3pt;margin-top:18pt}
+  .meta{color:#444;margin-bottom:18pt}
+  .qlabel{font-weight:bold;margin-top:10pt;margin-bottom:2pt}
+  .answer{margin-bottom:8pt;white-space:pre-wrap}
+  .empty{color:#888;font-style:italic}
+</style></head><body>`;
+    html += `<h1>Cuestionario</h1>`;
+    html += `<div class='meta'><strong>Respondido por:</strong> ${escape(nombre)}<br><strong>Fecha:</strong> ${escape(fecha)}</div>`;
+
+    document.querySelectorAll('section.block').forEach(sec => {
+      const h = sec.querySelector('h2');
+      if(h) html += `<h2>${escape(h.innerText)}</h2>`;
+      sec.querySelectorAll('.q').forEach(q => {
+        const label = q.querySelector('label');
+        const ta = q.querySelector('textarea');
+        if(label) html += `<div class='qlabel'>${escape(label.innerText)}</div>`;
+        if(ta){
+          const val = ta.value.trim();
+          if(val) html += `<div class='answer'>${escape(val)}</div>`;
+          else html += `<div class='answer empty'>[sin respuesta]</div>`;
+        }
+      });
+    });
+    html += `</body></html>`;
+    return html;
+  }
+
+  function escape(s){
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  window.downloadWord = function(){
+    const html = buildHtmlForWord();
+    const blob = new Blob(['﻿', html], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const stamp = new Date().toISOString().slice(0,10);
+    a.download = `cuestionario-brenda-${stamp}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  };
+
+  window.copyAll = function(){
+    const text = buildText();
+    navigator.clipboard.writeText(text).then(()=>{
+      status.textContent = '✓ Copiado al portapapeles';
+      setTimeout(()=>{ save(); }, 2000);
+    }).catch(()=>{
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+      status.textContent = '✓ Copiado';
+    });
+  };
+
+  window.clearAll = function(){
+    if(!confirm('¿Seguro que quieres borrar TODAS las respuestas? Esta acción no se puede deshacer.')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    fields.forEach(el => { el.value = ''; });
+    document.getElementById('meta-fecha').value = new Date().toISOString().slice(0,10);
+    updateProgress();
+    status.textContent = 'Respuestas borradas';
+  };
+})();
+</script>
+</body>
+</html>
